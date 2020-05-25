@@ -9,6 +9,15 @@ La principal ventaja es que un arbol es un tipo de grafo, por lo tanto nos servi
 
 Ademas de las clases se utilizo diccionarios, que es la manera mas facil de representar este tipo de estructuras de datos en Python. Claro, a este tipo de diccionarios van a guardar objetos de instancias de clases (Vertex) con el fin de almacenar multiples valores y datos en un mismo objeto, en vez de hacer multiples diccionarios, accion de programacion que es menos viable.
 
+## Algoritmos
+
+* **A*:** A estrella - A star
+* **BFS:** Busqueda por anchura
+* **DFS:** Busqueda por profundidad
+* **UCS:** Busqueda por costo uniforme
+* **Greedy:** Algoritmo Voraz
+* **Dijkstra**
+
 ## Usos
 
 Este proyecto se puede utilizan en diferentes campos de accion, Como en este caso, en geolocalizacion o utilizando otras localizaciones, no necesariamente estaciones, se puede llegar a un resultado con un optimo local o global por cada algoritmo.
