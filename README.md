@@ -11,7 +11,7 @@ Ademas de las clases se utilizo diccionarios, que es la manera mas facil de repr
 
 ### Mapa de estaciones
 
-[Mapa de estaciones del sistema de transporte Transmilenio.](https://www.sitp.gov.co/publicaciones/40236/mapas_transmilenio/info/sitp/media/img75080.jpg)
+![Mapa de estaciones del sistema de transporte Transmilenio.](https://www.sitp.gov.co/publicaciones/40236/mapas_transmilenio/info/sitp/media/img75080.jpg)
 
 * *El nombre de las estaciones puede cambiar. Extraido de https://www.sitp.gov.co/publicaciones/40236/mapas_transmilenio/*
 
