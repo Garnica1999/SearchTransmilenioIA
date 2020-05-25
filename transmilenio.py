@@ -784,15 +784,10 @@ for index in s.stations:
 
 vertex
 
-g.get_dictionary()
-
 """# **Impresion de las estaciones**
 
 Para verificar que las estaciones e hayan agregado se imprime el id y el nombre de la estacion.
 """
-
-for station in s.stations:
-    print(station)
 
 for station in s.stations:
     print(s.stations[station][0], station)
@@ -863,22 +858,6 @@ for v in g:
 
 for v in g:
     print ('g.vert_dict[%s]=%s' %(v.get_id(), g.vert_dict[v.get_id()]))
-
-#IMPRIMIMOS LOS NODOS ADYACENTES DEL VERTICE UNO CON SUS RESPECTIVOS PESOS
-g.get_vertex(1).adjacent
-
-#IMPRIMIR UN DICCIONARIO CON LOS NODOS ADYACENTES Y SUS PESOS DEL NODO 1
-g.get_vertex(1).get_dict_childrens_weights()
-
-#IMPRIMIR EL DICCIONARIO DEL GRAFO COMPLETO
-#TIENE EL FORMATO {id: obj<Graph>}
-g.vert_dict
-
-#DICCIONARIO RESUMIDO DEL GRAFO Y SUIS CONEXIONES
-g.get_dictionary()
-
-#ESTACIONES CREADAS
-s.stations
 
 """# **Escoger estaciones de inicio y destino**
 
