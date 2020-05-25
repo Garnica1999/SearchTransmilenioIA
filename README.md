@@ -9,7 +9,13 @@ La principal ventaja es que un arbol es un tipo de grafo, por lo tanto nos servi
 
 Ademas de las clases se utilizo diccionarios, que es la manera mas facil de representar este tipo de estructuras de datos en Python. Claro, a este tipo de diccionarios van a guardar objetos de instancias de clases (Vertex) con el fin de almacenar multiples valores y datos en un mismo objeto, en vez de hacer multiples diccionarios, accion de programacion que es menos viable.
 
-## Algoritmos
+### Mapa de estaciones
+
+![Mapa de estaciones del sistema de transporte Transmilenio.](https://www.sitp.gov.co/publicaciones/40236/mapas_transmilenio/info/sitp/media/img75080.jpg)
+
+* *El nombre de las estaciones puede cambiar. Extraido de https://www.sitp.gov.co/publicaciones/40236/mapas_transmilenio/*
+
+### Algoritmos
 
 * **A star:** A estrella - A star - A*
 * **BFS:** Busqueda por anchura
