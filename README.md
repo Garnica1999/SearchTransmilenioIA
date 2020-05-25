@@ -11,7 +11,7 @@ Ademas de las clases se utilizo diccionarios, que es la manera mas facil de repr
 
 ## Algoritmos
 
-* **A*:** A estrella - A star
+* **A star:** A estrella - A star - A*
 * **BFS:** Busqueda por anchura
 * **DFS:** Busqueda por profundidad
 * **UCS:** Busqueda por costo uniforme
