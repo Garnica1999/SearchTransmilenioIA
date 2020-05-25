@@ -2,7 +2,7 @@
 Proyecto Transmilenio para buscar la mejor ruta entre multiples estaciones usando algoritmos de busqueda de Inteligencia Artificial progrmado en Python
 
 ## Descripcion
-Este proyecto consiste en buscar la mejor ruta dentro del sistema de portales y estaciones de transmilenio. Para lograr esto se implementa un sistema de arboles y grafos para hacer busquedas no informadas e informadas con los algoritmos BSF, DFS, UCS y A*
+Este proyecto consiste en buscar la mejor ruta dentro del sistema de portales y estaciones de transmilenio. Para lograr esto se implementa un sistema de arboles y grafos para hacer busquedas no informadas e informadas con los algoritmos ```BSF, DFS, UCS y A*```
 Para hacer la representacion sobre un grafo en computacion necesitamos construir varias clases que representen a los nodos, los pesos y la conexion entre ellos.
 
 La principal ventaja es que un arbol es un tipo de grafo, por lo tanto nos serviran las mismas clases para representarlo.
