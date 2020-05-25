@@ -103,27 +103,72 @@ class Vertex:
     def __str__(self):
         return str(self.id) + ' adjacent: ' + str([x.id for x in self.adjacent])
 
+    '''
+    Agrega vecinos dado un objeto de la clase Vertex y su respectivo costo.
+    Entrada:
+        * neightbor: Obtejo de la clase Vertex que representa un nodo adyacente 
+        de este nodo (self).
+        * weight: Peso entre el vertice vecino y este nodo (self).
+    '''
     def add_neighbor(self, neighbor, weight=0):
         self.adjacent[neighbor] = weight
 
+    '''
+    Obtiene las conexiones adyacentes en este nodo (self)
+    Salida:
+        Nodos adyacentes.
+    '''
     def get_connections(self):
         return self.adjacent.keys()  
 
+    '''
+    Obtiene en forma de lista de enteros los vertices vecinos de este nodo (self)
+    Salida:
+        Lista con los ids de los nodos adyacentes a este nodo (self).
+    '''
     def get_childrens(self):
         return [x.id for x in self.adjacent]
 
+    '''
+    Obtiene en forma de lista de la clase Vertes los nodos vecinos de este nodo (self)
+    Salida:
+        Lista con los objetos de la clase Vertex representando los nodos vecinos de este nodo (self).
+    '''
     def get_vertex_childrens(self):
         return [x for x in self.adjacent]
 
+    '''
+    Obtener el id de este nodo (self).
+    Salida:
+        Un entero que representa el id este nodo (self).
+    '''
     def get_id(self):
         return self.id
 
+    '''
+    Obtiene el peso entre este nodo (self) y un vecino.
+    Salida:
+        Numero que representa el peso entre este nodo (self) y un vertice vecino.
+    '''
     def get_weight(self, neighbor):
         return self.adjacent[neighbor]
 
+    '''
+    Metodo que obtiene las coordenadas geograficas de un vertice, el cual 
+    representa a una estacion del sistema de Transmilenio.
+    Salida:
+        Coordenadas geograficas en (x,y) de un vertice.
+    '''
     def get_coordinates(self):
         return self.coordinates
 
+    '''
+    Metodo que construye un diccionario de datos en el formato {id: weight} 
+    correspondiente a los nodos adyacentes de este nodo (self).
+    Salidas:
+        Diccioanrio de datos de los vertices adyacentes de este nodo (self) 
+        con sus respectivos pesos.
+    '''
     def get_dict_childrens_weights(self):
         dictionary = {}
 
@@ -134,26 +179,13 @@ class Vertex:
 
         return dictionary
 
-
     def __repr__(self):
         return '{}, {}'.format(repr(self.id), repr(self.coordinates))
     
     def __lt__(self,other):
-        """
-        Perform the less than operation (self < other).
-        
-        Args:
-            other: the other Node to compare to
-        """
         return (self.id < other.id )
     
     def __gt__(self,other):
-        """
-        Perform the greater than operation (self > other).
-        
-        Args:
-            other: the other Node to compare to
-        """
         return (self.id  > other.id )
 
 """# **Clase Grafo**
@@ -168,21 +200,48 @@ class Graph:
         self.vert_dict = {}
         self.num_vertices = 0
 
+    '''
+    Permite la iteracion sobre esta clase.
+    '''
     def __iter__(self):
         return iter(self.vert_dict.values())
 
+    '''
+    Agrega un vertice al diccionario de datos que representa un grafo.
+    Entrada:
+        * node: ID del nuevo nodo
+        * coordinates: Coordenadas de la ubicacion geografica representada 
+        logicamente por un vertice.
+    Salida:
+        Retorna un objeto dela clase Vertex, que representa a el vertice recien
+        agregado.
+    '''
     def add_vertex(self, node, coordinates):
         self.num_vertices = self.num_vertices + 1
         new_vertex = Vertex(node, coordinates)
         self.vert_dict[node] = new_vertex
         return new_vertex
 
+    '''
+    Obtiene un vertice dado el id de un vertice existente
+    Entrada:
+        * n: ID de un vertice
+    Salida:
+        Retorna un objeto de la clase Vertex en caso de encontrar el vertice. 
+        En caso contrario devuelve un objeto nulo (None)
+    '''
     def get_vertex(self, n):
         if n in self.vert_dict:
             return self.vert_dict[n]
         else:
             return None
-
+    '''
+    Metodo el cual agrega conexion (arista) dados 2 nodos y un peso.
+    Entradas:
+        * frm: Coordenadas geograficas del sitio 1
+        * to: Coordenadas geograficas del sitio 2
+        * cost: El costo entre los 2 vertices
+    '''
     def add_edge(self, frm, to, cost = 0):
         if frm not in self.vert_dict:
             self.add_vertex(frm)
@@ -192,21 +251,26 @@ class Graph:
         self.vert_dict[frm].add_neighbor(self.vert_dict[to], cost)
         self.vert_dict[to].add_neighbor(self.vert_dict[frm], cost)
 
+    '''
+    Metodo que obtiene todos los vertices del grafo
+    Salidas:
+        * Lista con todos los vertices del grafo
+    '''
     def get_vertices(self):
         return self.vert_dict.keys()
 
+    '''
+    Convierte el diccionario {id:obj<Vertex>} en un diccionario {id: list[vecinos...]},
+    el cual vecinos representa cada nodo adyacente al nodo id.
+    Salida:
+        * Diccionario de datos convertido en el formato {id: list[vecinos...]}
+    '''
     def get_dictionary(self):
         graph = {}
         for v in self.vert_dict.values():
             graph.setdefault(v.get_id(), v.get_childrens())
 
         return graph
-
-    # Create an undirected graph by adding symmetric edges
-    def make_undirected(self):
-        for a in list(self.graph_dict.keys()):
-            for (b, dist) in self.graph_dict[a].items():
-                self.graph_dict.setdefault(b, {})[a] = dist
 
 """# **Clase Node**
 
@@ -219,19 +283,19 @@ class Node:
     def __init__(self, name, parent):
         self.name = name
         self.parent = parent
-        self.g = 0 # Distance to start node
-        self.h = 0 # Distance to goal node
-        self.f = 0 # Total cost
+        self.g = 0 # Distancia al nodo de inicio
+        self.h = 0 # Distance al nodo objetivo
+        self.f = 0 # Total costo
 
-    # Compare nodes
+    # Comparacion de los nodos
     def __eq__(self, other):
         return self.name == other.name
 
-    # Sort nodes
+    # Ordenamiento de los vertices
     def __lt__(self, other):
          return self.f < other.f
 
-    # Print node
+    # Impresion de los nodos
     def __repr__(self):
         return ('({0},{1})'.format(self.position, self.f))
 
@@ -253,6 +317,15 @@ Aun asi, se puede utilizar cualquier medicion tomando las coordenadas (longitud 
 
 class TreeSearch:
 
+    '''
+    Inicializacion
+    Entradas:
+        *graph: variable la cual puede tomar forma de objeto de la clase Graph
+        u objeto de la clase dict, dependiendo del algoritmo a ejecutar debe de 
+        cambiarse.
+    Excepciones:
+        *TypeError: Se produce cuando la variable graph tiene un valor None.
+    '''
     def __init__(self, graph):
         if graph is not None:
             self.graph = graph
@@ -260,6 +333,18 @@ class TreeSearch:
         else:
             raise TypeError('El grafo tiene un valor de instancia incorrecto: None')
 
+    #Algoritmos de busqueda no informada
+    '''
+    Algoritmo BFS
+    Entradas:
+        - start: Nodo de entrada de la clase Vertex
+        - goal: Nodo objetivo de la clase Vertex
+    *Salidas: Lista con la ruta optima encontrada por este algoritmo. Cada indice
+    es el id del nodo que pertenece a aquel camino optimo.
+    *Excepciones:
+        * TypeError: Esta excepcion ocurre cuando el campo de la presente clase graph
+        no es la instancia de la clase Graph, sino una matriz o un diccionario.
+    '''
     def bfs_shortest_path(self, start, goal):
         if (isinstance(self.graph, dict)):
             raise TypeError('El grafo no es instancia de la clase Graph')
@@ -291,6 +376,16 @@ class TreeSearch:
     
         return "No hay conexion entre el nodo de inicio y el objetivo."
 
+    '''
+    Algoritmo DFS
+        - start: id del Nodo de entrada
+        - goal: id del Nodo de salida
+    Salida: Lista con la ruta optima encontrada por este algoritmo. Cada indice
+    es el id del nodo que pertenece a aquel camino optimo.
+    Excepciones:
+        *TypeError: Se produce cuando el campo graph de la presente clase no 
+        es una instacia de la clase dict.
+    '''
     def dfs_paths(self, start, goal):
         if(isinstance(self.graph, Graph)):
             raise TypeError('El grafo no es instancia de un diccionario.')
@@ -304,6 +399,17 @@ class TreeSearch:
                 else:
                     stack.append((next, path + [next]))
 
+    '''
+    Algoritmo UCS
+    Entradas:
+        - start: Nodo de entrada de la clase Vertex
+        - goal: Nodo objetivo de la clase Vertex
+    -Salidas: Lista con la ruta optima encontrada por este algoritmo. Cada indice
+    es el id del nodo que pertenece a aquel camino optimo.
+    -Excepciones:
+        * TypeError: Esta excepcion ocurre cuando el campo de la presente clase graph
+        no es la instancia de la clase Graph, sino una matriz o un diccionario.
+    '''
     def ucs(self, start, goal):
         if (isinstance(self.graph, dict)):
             raise TypeError('El grafo no es instancia de la clase Graph')
@@ -334,11 +440,24 @@ class TreeSearch:
                         new_path.append(i)
                         queue.put((total_cost, new_path))
     
+    #Algoritmos de busqueda informada
+    '''
+    Metodo alternativo para la medicion de la heuristica
+    Entradas: 
+        - graph: objeto de la clase Graph
+        - a: Id de un nodo
+        - b: id de un nodo
+        - method: Indica la metrica de medicion de distancia. Euclidean o 
+        manhattan
+    Salida: Numero el cual indica la distancia dado 2 puntos o coordenadas de 2
+    lugares.
+    '''
     def heuristic(self, graph, a, b, method = 'euclidean'):
-        #GET WEIGHTS
+        #Se obitnene los vertices dado el id del vertice
         node_a = graph.get_vertex(a)
         node_b = graph.get_vertex(b)
 
+        #Se extraen las coordenadas
         (x1, y1) = node_a.get_coordinates()
         (x2, y2) = node_b.get_coordinates()
         if method == 'euclidean':
@@ -346,72 +465,112 @@ class TreeSearch:
         elif method == 'manhattan':
             return abs(x1 - x2) + abs(y1 - y2)
 
-    def astar_search(self, graph, heuristics, start, end):
+    '''
+    Algoritmo A* - Dijkstra - Algoritmo Voraz
+        * Sera A* cuando exista g(n) y h(n), y estos sean mayores a 0
+        * Cuando h(n) = 0 entonces este algoritmo es Dijkstra
+        * Cuando g(n) = 0 entonces este algoritmo es un algoritmo voraz
+    Entradas:
+        - graph: El objeto de la clase Graph
+        - heuristics: Diccionario con la distancia total entre un punto de 
+        destino y final.
+        - start: id del nodo de inicio
+        - end: id del vertice el cual es el final del recorrido
+        - gn: Booleano el cual indica si activar o no g(n). 
+        Si esta desactivado este algoritmo pasa a ser Dijkstra.
+    Salida: Lista con la ruta optima encontrada por este algoritmo. Cada indice
+    es el id del nodo que pertenece a aquel camino optimo.
+    Excepciones:
+        * TypeError: Se produce cuando el campo de esta clase graph no es un 
+        objeto de la instancia de la clase Graph, o cuando la variable gn es 
+        falsa al mismo tiempo que heuristics es None.
+    '''
+
+    def astar_search(self, graph, heuristics, start, end, gn = True):
         if (isinstance(self.graph, dict)):
             raise TypeError('El grafo no es instancia de la clase Graph')
-        # Create lists for open nodes and closed nodes
+
+        if gn is False and heuristic is None:
+            raise TypeError('El parametro gn no puede ser falso al mismo tiempo que heuristics es None')
+        # Creacion de las listas para guardar los vertices abiertos y cerrados
         open = []
         closed = []
 
-        # Create a start node and an goal node
+        # Crear un nodo inicial y final
         start_node = Node(start, None)
         goal_node = Node(end, None)
 
-        # Add the start node
+        # Agregar el nodo de inicio a la lista de vertices abiertos
         open.append(start_node)
         
-        # Loop until the open list is empty
+        # Iterar hasta que la lista de nodos abiertos este vacia
         while len(open) > 0:
 
-            # Sort the open list to get the node with the lowest cost first
+            #Ordenar la lista de ndoos abiertos para obtener el vertice con costo mas bajo
             open.sort()
 
-            # Get the node with the lowest cost
+            # Obtner el nodo con el menor costo
             current_node = open.pop(0)
 
-            # Add the current node to the closed list
+            # Agregar el nodo a la lista de vertices cerrados.
             closed.append(current_node)
             
-            # Check if we have reached the goal, return the path
+            # Si se llego al nodo final retornar la ruta mas optima
             if current_node == goal_node:
                 path = []
                 while current_node != start_node:
                     path.append(str(current_node.name) + ': ' + str(current_node.g))
                     current_node = current_node.parent
                 path.append(str(start_node.name) + ': ' + str(start_node.g))
-                # Return reversed path
+                # Retornar la lista en reversa.
                 return path[::-1]
 
-            # Get neighbours
-            
-            #neighbors = graph.get()
+            # Obtener vecinos del nodo actual
             neighbors = graph.get_vertex(current_node.name).get_dict_childrens_weights()
 
-            # Loop neighbors
+            # Iterar sobre los vecinos del nodo actual
             for key, value in neighbors.items():
 
-                # Create a neighbor node
+                # Crear un nodo vecino
                 neighbor = Node(key, current_node)
 
-                # Check if the neighbor is in the closed list
+                # Verificar si el nodo esta en la lista de vertices cerrados
                 if(neighbor in closed):
                     continue
 
-                # Calculate full path cost
+                # Calcular el costo de la ruta completa
                 neig_node = graph.get_vertex(neighbor.name)
                 cost = graph.get_vertex(current_node.name).get_weight(neig_node)
-                neighbor.g = current_node.g + cost
-                neighbor.h = heuristics.get(neighbor.name)
+
+                if gn is True:
+                    neighbor.g = current_node.g + cost
+                else:
+                    neighbor.g = 0
+
+                if heuristics is not None:
+                    neighbor.h = heuristics.get(neighbor.name)
+                else:
+                    neighbor.h = 0
                 neighbor.f = neighbor.g + neighbor.h
 
-                # Check if neighbor is in open list and if it has a lower f value
+                #Verificar si el nodo vecino esta en la lista abierta y si este tiene un valor f mas bajo
                 if(self.add_to_open(open, neighbor) == True):
-                    # Everything is green, add neighbor to open list
                     open.append(neighbor)
 
-        # Return None, no path is found
+        # Retorna None si no se encontro ruta optima
         return None
 
+    '''
+    Metodo que verifica si un vecino debe de ser agregado a la lista de vertices
+    abiertos. Funcion utilizada para el algoritmo A*
+
+    Entradas:
+        * open: Lista de vertices abiertos
+        * neighbor: Vertice vecino a evaluar
+    Salidas: Retorna verdadero si se cumplen las indicaciones para que el vertice
+    vecino sea agregado a la lista de nodos abiertos, de lo contrario retorna 
+    falso.
+    '''
     # Check if a neighbor should be added to open list
     def add_to_open(self, open, neighbor):
         for node in open:
@@ -419,14 +578,36 @@ class TreeSearch:
                 return False
         return True
 
+    '''
+    Metodo el cual calcula la funcion heuristica para cada estacion o ubicacion
+    geografica.
+
+    Entradas:
+        * graph: Grafo de la clase graph
+        * station: objeto de la clase Station
+    Salida: Diccionario el cual contiene la distancia desde una ubicacion 
+    geografica a todas las demas registradas.
+    '''
     def construct_heristic(self, graph, station):
         heuristic = {}
+
+        #Obtener el nodo del cual se va a medir la distancia hacia demas
         frm = graph.get_vertex(24)
+
+        #Obtener coordenadas
         coordinates_from = frm.get_coordinates()
+
+        #Iterar en todos los vertices existentes en el grafo
         for i in range(graph.num_vertices):
+
+            #Obtener nodo y coordenadas del nodo a medir su distancia
             to_node = graph.get_vertex(i)
             coordinates_to = to_node.get_coordinates()
+
+            #Calcular la distancia
             dist = station.distance(coordinates_from, coordinates_to)
+
+            #Ingresar estacion y distancia al diccionario
             heuristic.setdefault(i, dist)
 
         return heuristic
@@ -445,7 +626,13 @@ class Station:
 
     def __init__(self):
         self.stations = {}
-    
+    '''
+    Metodo para agregar las estaciones a un diccionario de datos. Se agrega el
+    nombre de la estacion, junto a una lista que contiene el id que va a tener
+    esta estacion y las coordenadas geograficas que tiene este lugar.
+    Salida: 
+        Guardar el resultado en el diccionario alojado en la presente clase.
+    '''
     def build_all_stations(self):
 
         self.stations.setdefault('Portal Norte', [0, (4.754228, -74.046161)])
@@ -491,25 +678,60 @@ class Station:
         self.stations.setdefault('Concejo de Bogotá', [40, (4.626496, -74.080722)])
         self.stations.setdefault('Centro Memoria', [41, (4.621915, -74.077436)])
         self.stations.setdefault('U. Nacional', [42, (4.636493, -74.079328)])
-    
+    '''
+    Mide la distancia entre 2 coordenadas geograficas.
+    Entradas:
+        * frm: Coordenadas geograficas del sitio 1
+        * to: Coordenadas geograficas del sitio 2
+    Salida:
+        La distancia en metros entre 2 puntos utilizando el algoritmo gran circulo
+        de la libreria Geopy
+    '''
     def distance(self, frm, to):
-        #print(frm, to)
+        
         return float(great_circle(frm, to).meters)
 
-    #CREAR CONEXIONES-ARISTAS
-    def set_connections_stations(self, frm, to):
+    '''
+    Metodo que se encarga de crear las conexiones entre 2 estaciones en el grafo.
+    Entradas:
+        * frm: Coordenadas geograficas del sitio 1
+        * to: Coordenadas geograficas del sitio 2
+        * graph: Grafo de la clase graph
+    '''
+    def set_connections_stations(self, graph, frm, to):
+
+        #Se obtienen los IDs de los nodos de incio y fin de la clase Vertex
         frm = vertex[self.stations[frm][0]]
         to = vertex[self.stations[to][0]]
 
+        #Calcula el costo
         cost = self.distance(frm.get_coordinates(), to.get_coordinates())
-        g.add_edge(frm.get_id(), to.get_id(), cost)
 
+        #Se agrega la conexion entre los nodos inicio y fin con su respectivo costo
+        graph.add_edge(frm.get_id(), to.get_id(), cost)
+
+    '''
+    Dado un diccionario de datos y el id de un vertice devuelve el nombre de la estacion
+    Entrada:
+        * dictionary: Diccionaro de datos el cual contiene las estaciones
+        * value: el id de la estacion, la cual se desea obtener el nombre.
+    Salida:
+        Retorna el nombre de la estacion. Si no se encontro retorna None.
+    '''
     def get_station_by_id(self, dictionary, value):
         for s in dictionary:
             if dictionary[s][0] == value:
                 return s
         return None
 
+    '''
+    Convierte una lista de IDs de nodos en el nombre de las estaciones que conforman
+    la ruta mas optima dada por un algoritmo de busqueda no informada o informada.
+    Entrada:
+        * list_stations_id: Lista de la ruta optima que guarda el id de los nodos
+    Salida:
+        * Lista con los nombre de las estaciones que conforman la mejor ruta optima
+    '''
     def convert_id_to_station(self, list_stations_id):
         new_list = []
         for id in list_stations_id:
@@ -580,51 +802,51 @@ for station in s.stations:
 Utilizando la funcion `Station.distance` para obtener el costo entre 2 estaciones y luego `Graph.add_edge` para conectar 2 vertices, se procede a crear las conexiones entre 2 estaciones con el metodo `Station.set_connections_stations`, pasandole como parametros el nombre de las 2 estaciones a conectar. Este metodo busca las estaciones y escoge el id de cada estacion para luego buscar su vertice correspondiente con este numero de identificacion qeu se aloja en el diccionario del grafo, conectandolos asi utilizando el objeto `g` de la clase `Graph.`.
 """
 
-s.set_connections_stations('Portal Norte', 'Toberin')
-s.set_connections_stations('Toberin', 'Calle 161')
-s.set_connections_stations('Calle 161', 'Mazuren')
-s.set_connections_stations('Mazuren', 'Calle 146')
-s.set_connections_stations('Calle 146', 'Calle 142')
-s.set_connections_stations('Calle 142', 'Alcala')
-s.set_connections_stations('Alcala', 'Prado')
-s.set_connections_stations('Prado', 'Calle 127')
-s.set_connections_stations('Calle 127', 'Pepe Sierra')
-s.set_connections_stations('Pepe Sierra', 'Calle 106')
-s.set_connections_stations('Calle 106', 'Calle 100')
-s.set_connections_stations('Calle 100', 'La Castellana')
-s.set_connections_stations('La Castellana', 'NQS-Calle 75')
-s.set_connections_stations('NQS-Calle 75', 'AV. Chile')
-s.set_connections_stations('AV. Chile', 'Simon Bolivar')
-s.set_connections_stations('Simon Bolivar', 'Movistar Arena')
-s.set_connections_stations('Movistar Arena', 'Campin - U. Antonio Nariño')
-s.set_connections_stations('Campin - U. Antonio Nariño', 'U. Nacional')
-s.set_connections_stations('U. Nacional', 'AV. El Dorado')
-s.set_connections_stations('AV. El Dorado', 'CAD')
-s.set_connections_stations('CAD', 'Paloquemao')
-s.set_connections_stations('Paloquemao', 'Ricaurte')
-s.set_connections_stations('Ricaurte', 'San Façon')
-s.set_connections_stations('San Façon', 'De La Sabana')
-s.set_connections_stations('De La Sabana', 'AV. Jiménez')
-s.set_connections_stations('Calle 100', 'Virrey')
-s.set_connections_stations('Virrey', 'Calle 85')
-s.set_connections_stations('Calle 85', 'Héroes')
-s.set_connections_stations('Héroes', 'Calle 76')
-s.set_connections_stations('Calle 76', 'Calle 72')
-s.set_connections_stations('Calle 72', 'Flores')
-s.set_connections_stations('Flores', 'Calle 63')
-s.set_connections_stations('Calle 63', 'Calle 57')
-s.set_connections_stations('Calle 57', 'Marly')
-s.set_connections_stations('Marly', 'Calle 45')
-s.set_connections_stations('Calle 45', 'AV. 39')
-s.set_connections_stations('AV. 39', 'Calle 34')
-s.set_connections_stations('Calle 34', 'Calle 26')
-s.set_connections_stations('Calle 26', 'Calle 22')
-s.set_connections_stations('Calle 22', 'Calle 19')
-s.set_connections_stations('Calle 19', 'AV. Jiménez')
-s.set_connections_stations('Calle 26', 'Centro Memoria')
-s.set_connections_stations('Centro Memoria', 'Concejo de Bogotá')
-s.set_connections_stations('Concejo de Bogotá', 'AV. El Dorado')
-s.set_connections_stations('Concejo de Bogotá', 'CAD')
+s.set_connections_stations(g, 'Portal Norte', 'Toberin')
+s.set_connections_stations(g, 'Toberin', 'Calle 161')
+s.set_connections_stations(g, 'Calle 161', 'Mazuren')
+s.set_connections_stations(g, 'Mazuren', 'Calle 146')
+s.set_connections_stations(g, 'Calle 146', 'Calle 142')
+s.set_connections_stations(g, 'Calle 142', 'Alcala')
+s.set_connections_stations(g, 'Alcala', 'Prado')
+s.set_connections_stations(g, 'Prado', 'Calle 127')
+s.set_connections_stations(g, 'Calle 127', 'Pepe Sierra')
+s.set_connections_stations(g, 'Pepe Sierra', 'Calle 106')
+s.set_connections_stations(g, 'Calle 106', 'Calle 100')
+s.set_connections_stations(g, 'Calle 100', 'La Castellana')
+s.set_connections_stations(g, 'La Castellana', 'NQS-Calle 75')
+s.set_connections_stations(g, 'NQS-Calle 75', 'AV. Chile')
+s.set_connections_stations(g, 'AV. Chile', 'Simon Bolivar')
+s.set_connections_stations(g, 'Simon Bolivar', 'Movistar Arena')
+s.set_connections_stations(g, 'Movistar Arena', 'Campin - U. Antonio Nariño')
+s.set_connections_stations(g, 'Campin - U. Antonio Nariño', 'U. Nacional')
+s.set_connections_stations(g, 'U. Nacional', 'AV. El Dorado')
+s.set_connections_stations(g, 'AV. El Dorado', 'CAD')
+s.set_connections_stations(g, 'CAD', 'Paloquemao')
+s.set_connections_stations(g, 'Paloquemao', 'Ricaurte')
+s.set_connections_stations(g, 'Ricaurte', 'San Façon')
+s.set_connections_stations(g, 'San Façon', 'De La Sabana')
+s.set_connections_stations(g, 'De La Sabana', 'AV. Jiménez')
+s.set_connections_stations(g, 'Calle 100', 'Virrey')
+s.set_connections_stations(g, 'Virrey', 'Calle 85')
+s.set_connections_stations(g, 'Calle 85', 'Héroes')
+s.set_connections_stations(g, 'Héroes', 'Calle 76')
+s.set_connections_stations(g, 'Calle 76', 'Calle 72')
+s.set_connections_stations(g, 'Calle 72', 'Flores')
+s.set_connections_stations(g, 'Flores', 'Calle 63')
+s.set_connections_stations(g, 'Calle 63', 'Calle 57')
+s.set_connections_stations(g, 'Calle 57', 'Marly')
+s.set_connections_stations(g, 'Marly', 'Calle 45')
+s.set_connections_stations(g, 'Calle 45', 'AV. 39')
+s.set_connections_stations(g, 'AV. 39', 'Calle 34')
+s.set_connections_stations(g, 'Calle 34', 'Calle 26')
+s.set_connections_stations(g, 'Calle 26', 'Calle 22')
+s.set_connections_stations(g, 'Calle 22', 'Calle 19')
+s.set_connections_stations(g, 'Calle 19', 'AV. Jiménez')
+s.set_connections_stations(g, 'Calle 26', 'Centro Memoria')
+s.set_connections_stations(g, 'Centro Memoria', 'Concejo de Bogotá')
+s.set_connections_stations(g, 'Concejo de Bogotá', 'AV. El Dorado')
+s.set_connections_stations(g, 'Concejo de Bogotá', 'CAD')
 
 g.get_dictionary()
 
@@ -675,6 +897,13 @@ Se procede a llamar a los metodos de busqueda alojados en la clase `TreeSearch`.
 > Todos los metodos devuelven la ruta mas corta en forma de id de cada nodo. En el caso de A* devuelve un arreglo con la ruta optima y su costo acumulado. Para eliminar este costo se coge solamente la parte del id del nodo que corresponde la camino de la ruta mas optima decidida por este algoritmo.
 """
 
+def delete_weights_dict(dictionary):
+    for index, element in enumerate(dictionary):
+        cad = element.split(':')
+        node = cad[0]
+        dictionary[index] = int(node)
+    return dictionary
+
 bfs = tree.bfs_shortest_path(node_from.get_id(), node_to.get_id())
 ucs = tree.ucs(node_from, node_to)
 
@@ -685,11 +914,13 @@ tree.graph = g
 
 heuristic = tree.construct_heristic(g, s)
 a_star = tree.astar_search(g, heuristic, node_from.get_id(), node_to.get_id())
+a_star = delete_weights_dict(a_star)
 
-for index, element in enumerate(a_star):
-    cad = element.split(':')
-    node = cad[0]
-    a_star[index] = int(node)
+dijkstra = tree.astar_search(g, None, node_from.get_id(), node_to.get_id())
+dijkstra = delete_weights_dict(dijkstra)
+
+greedy = tree.astar_search(g, heuristic, node_from.get_id(), node_to.get_id(), gn = False)
+greedy = delete_weights_dict(greedy)
 
 #dijkstra = tree.a_star_search(g, node_from.get_id(), node_to.get_id(), heuris=False)
 
@@ -702,9 +933,8 @@ bfs_convert = s.convert_id_to_station(bfs)
 ucs_convert = s.convert_id_to_station(ucs)
 dfs_convert = s.convert_id_to_station(dfs)
 astar_convert = s.convert_id_to_station(a_star)
-
-
-#print('Dijkstra: ', dijkstra)
+dijkstra_convert = s.convert_id_to_station(dijkstra)
+greedy_convert = s.convert_id_to_station(greedy)
 
 """# **Impresion de las rutas optimas por algoritmo**"""
 
@@ -712,6 +942,8 @@ print("BFS: " + str(bfs_convert))
 print('UCS: ' + str(ucs_convert))
 print("DFS: " + str(dfs_convert))
 print('A*: ', astar_convert)
+print('Dijkstra: ', dijkstra_convert)
+print('Greedy: ', dijkstra_convert)
 
 """# **Conclusiones**
 Como conclusiones se tiene que:
